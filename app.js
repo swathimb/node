@@ -17,23 +17,14 @@ server.listen(3000)
 */
 
 const express = require('express');
-const bodyParser = require('body-parser');
+
+const routes = require('./routes/shop');
+const adminRoutes = require('./routes/admin')
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(adminRoutes); // works as a valid middleware
 
-app.use('/user', (req, res, next) => {
-    res.send('<form action="/user-details" method="POST"><input id="name" name="name"/><button type="submit">Send</button></form>')
-});
-
-app.post('/user-details', (req, res, next) => {
-    console.log('----------', req.body);
-    res.redirect('/')
-})
-
-app.use('/', (req, res, next) => {
-    res.send('<h1>Hi from Express !!</h1>');
-})
+app.use(routes);
 
 app.listen(3000)
