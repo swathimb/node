@@ -18,18 +18,30 @@ server.listen(3000)
 
 const express = require('express');
 const path = require('path');
+const { engine } = require('express-handlebars')
 
 const routes = require('./routes/shop');
 const adminRoutes = require('./routes/admin')
 
 const app = express();
 
-app.use(adminRoutes); // works as a valid middleware
+//configuring handlebar in express
+app.engine('hbs', engine({
+    extname: 'hbs',
+    layoutsDir: 'views',
+    defaultLayout: false
+}));
+app.set('view engine', 'hbs');
+app.set('views', 'views')
+
+app.use('/admin', adminRoutes); // works as a valid middleware
 
 app.use(routes);
 
+//Not found page route. should be added at end
 app.use((req, res, next) => {
-    res.status(404).sendFile(path.join(__dirname, 'views', 'page-not-found.html'))
+    // res.status(404).sendFile(path.join(__dirname, 'views', 'page-not-found.html'))
+    res.status(404).render('page-not-found', { pageNotFound: 'Page doesnt exists' })
 })
 
 app.listen(3000)
