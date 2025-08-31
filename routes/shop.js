@@ -1,14 +1,12 @@
 const express = require('express');
-const path = require('path')
+
+const productController = require('../controllers/products')
 
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
-    // res.send('<h1>Hi from Express !!</h1>');
-    // res.sendFile('/view/shop.html') cannot do this because '/' points to root folder 
-    // of OS and not the project folder
-    res.sendFile(path.join(__dirname, '../', 'views', 'shop.html'))
-});
+router.get('/', productController.getProducts);
+
+router.get('/product/:productId', productController.getProductById)
 
 module.exports = router;
 

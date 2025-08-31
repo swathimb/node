@@ -20,8 +20,9 @@ const express = require('express');
 const path = require('path');
 const { engine } = require('express-handlebars')
 
-const routes = require('./routes/shop');
+const shopRoutes = require('./routes/shop');
 const adminRoutes = require('./routes/admin')
+const notFoundController = require('./controllers/notFound')
 
 const app = express();
 
@@ -36,13 +37,10 @@ app.set('views', 'views')
 
 app.use('/admin', adminRoutes); // works as a valid middleware
 
-app.use(routes);
+app.use(shopRoutes);
 
 //Not found page route. should be added at end
-app.use((req, res, next) => {
-    // res.status(404).sendFile(path.join(__dirname, 'views', 'page-not-found.html'))
-    res.status(404).render('page-not-found', { pageNotFound: 'Page doesnt exists' })
-})
+app.use(notFoundController.notFound)
 
 app.listen(3000)
 
